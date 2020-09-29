@@ -20,7 +20,7 @@ var svg = d3.select("body")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Importing the  Data
-d3.csv("data.csv").then(function(censusData) {
+d3.csv("assets/data/data.csv").then(function(censusData) {
     censusData.forEach(function(data) {
       data.state = +data.state;
       data.obesity = +data.obesity;
@@ -35,4 +35,3 @@ var yLinearScale = d3.scaleLinear().range([height,0]);
 
 var bottomAxis = d3.axisBottom(xLinearScale);
 var leftAxis = d3.axisLeft(yLinearScale);
-
