@@ -19,10 +19,10 @@ var svg = d3.select("body")
   var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Importing the  Data. Will be using "State vs. Average Obesity" as my data.
+// Importing the  Data. Will be using "Smokes vs. Average Obesity" as my data.
 d3.csv("assets/data/data.csv").then(function(censusData) {
     censusData.forEach(function(data) {
-      data.state = +data.state;
+      data.smokes = +data.smokes;
       data.obesity = +data.obesity;
       // console.log(censusData)
     })
@@ -43,7 +43,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   var yMax;
 
   xMin = d3.min(censusData, function(data) {
-    return data.state;
+    return data.smokes;
   });
 
   yMin = d3.min(censusData, function(data) {
@@ -51,7 +51,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   });
 
   xMax = d3.max(censusData, function(data) {
-    return data.state;
+    return data.smokes;
   });
 
   yMax = d3.max(censusData, function(data) {
@@ -75,7 +75,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   var circlesGroup = chartGroup.selectAll("circle")
       .data(censusData)
       .enter()
-      .attr("cx", d => xLinearScale(d.state))
+      .append("circle")
+      .attr("cx", d => xLinearScale(d.smokes))
       .attr("cy", d => yLinearScale(d.obesity))
       .attr("r", "15")
       .attr("fill", "darkturquoise")
@@ -89,7 +90,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
       .attr("class", "tooltip")
       .offset([80, -60])
       .html(function(d) {
-        return(abbr + '%');
+        var smoking = d.smokes;
+        var stateLabel = d.state;
+        var obesityNumber = d.obesity;
+        return("<br>State: " + stateLabel + "<br>Smokes?: " + smoking + "<br>Obesity?: " + obesityNumber);
       });
 
     // Creating the Tool Tip Chart
@@ -103,8 +107,14 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         toolTip.hide(data);
       });
       
-      // Creating the axes labels
-      chartGroup.append("text")
-        .attr("transform", "rotate(-90")
+    // Creating the axes labels
+    chartGroup.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left + 40)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("class", "axisText")
+      .text("Smokes vs. Average Obesity");
+
 
 });
